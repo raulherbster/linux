@@ -63,6 +63,8 @@ struct getcpu_cache;
 struct old_linux_dirent;
 struct perf_event_attr;
 struct file_handle;
+struct sld_key_alias;
+struct sld_conn_handler;
 
 #include <linux/types.h>
 #include <linux/aio_abi.h>
@@ -861,10 +863,28 @@ asmlinkage long sys_process_vm_writev(pid_t pid,
 asmlinkage long sys_kcmp(pid_t pid1, pid_t pid2, int type,
 			 unsigned long idx1, unsigned long idx2);
 
-asmlinkage long sys_seal(int type);
-asmlinkage long sys_is_sealed(int type);
-asmlinkage long sys_sld_create_key(int type);
-asmlinkage long sys_sld_open(int type);
-asmlinkage long sys_sld_socket(int type);
+asmlinkage long sys_seal(void);
+asmlinkage long sys_is_sealed(void);
+asmlinkage long sys_sld_create_key(const struct sld_key_alias __user *key_alias);
+
+asmlinkage long sys_sld_open(const char __user *filename,
+                                int flags, const struct sld_key_alias __user *key_alias);
+
+asmlinkage long sys_sld_ssl_connect(const char __user *servername, 
+				const struct sld_key_alias __user *key_alias,
+				const struct sld_conn_handler __user *handler);
+asmlinkage long sys_sld_ssl_read(const struct sld_conn_handler __user *handler,
+				char __user *buf);
+asmlinkage long sys_sld_ssl_write(const struct sld_conn_handler __user *handler,
+                                char __user *buf);
+asmlinkage long sys_sld_ssl_disconnect(const struct sld_conn_handler __user *handler);
+asmlinkage long sys_sld_post(const struct sld_conn_handler __user *handler,
+                                char __user *buf, char __user *response);
+asmlinkage long sys_sld_put(const struct sld_conn_handler __user *handler,
+                                char __user *buf, char __user *response);
+asmlinkage long sys_sld_get(const struct sld_conn_handler __user *handler,
+                                char __user *buf, char __user *response);
+asmlinkage long sys_sld_delete(const struct sld_conn_handler __user *handler,
+                                char __user *buf, char __user *response);
 
 #endif
