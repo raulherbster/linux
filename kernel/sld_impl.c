@@ -1,8 +1,6 @@
 #include <linux/kernel.h>
 #include <linux/linkage.h>
 
-#include <linux/sld/sldlib.h>
-
 asmlinkage long
 sys_seal (void)
 {
